@@ -5,8 +5,16 @@ using namespace std;
 
 int main()
 {
-	fomularCore test;
-	cout<<test.Calc("1+ 2* 4+(5*4)")<<endl;
+	fomularCore test(10);
+	string teststr;
+	while (true)
+	{
+	//cin>>teststr;
+	//cout<<test.Calc(teststr)<<endl;
+		test.Generate();
+		break;
+	}
+
 
 	return 0;
 }

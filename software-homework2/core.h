@@ -3,6 +3,7 @@
 #include <string>
 #include <stack>
 #include <algorithm>
+#include <ctime>
 using namespace std;
 
 class fomularNode
@@ -13,140 +14,93 @@ public:
 	int ropNum;
 	fomularNode* lchild;
 	fomularNode* rchild;
-	fomularNode(char opin,size_t lop=0,size_t rop=0)
-	{
-		op = opin;
-	}
+	fomularNode() :op('\0'), lopNum(0), ropNum(0), lchild(NULL), rchild(NULL){}
+
 };
 
 class fomularCore
 {
 private:
 	vector<fomularNode*> fomulars;
-	vector<char> ops = {'+','-','*','/','(',')'};
+	vector<char> ops = {'+','-','*','/','(',')'};//all ops
+	long range = 1000;
+	int precise = 2;
 
-
-	bool isOperate(char ch)
+	bool deletefomu(fomularNode* ro)
 	{
-		auto it=find(ops.begin(), ops.end(), ch);
-		if (it == ops.end())
-			return false;
-		else 
-			return true;
+		if (ro->lchild != NULL)
+			deletefomu(ro->lchild);
+		if (ro->rchild != NULL)
+			deletefomu(ro->rchild);
+		delete ro;
+		return true;
 	}
 
-	int Rank(char s)
+	bool isOperate(char ch);
+	int Rank(char s);
+	double CalcNum(double a, double b, char c);
+	void doublepush(stack<double> & st, string exp, int & pos);
+	double arthimetic(string & exp);
+	//Calc depending func
+
+	int random(int a, int b)//random int [a,b]
 	{
-		switch (s)
-		{
-		case '#':return -2;
-		case '\0':return -1;
-		case '(':return 0;
-		case ')':return 0;//左右括号优先级小是为了不被其余任何运算符挤出
-		case '+':
-		case '-':return 1;//低优先级将挤出高优先级
-		case '*':
-		case '%':
-		case '/':return 2;
-		case '^':return 3;
-		default:;
-		}
-	}
+		//srand((unsigned int)(time(NULL)));
+		return (rand() % (b - a + 1)) + a;
 
-	long long CalcNum(long long a, long long b, char c)
-	{
-		switch (c)
-		{
-		case '+':return (a + b) ;
-		case '-':return (a - b) ;
-		case '*':return (a*b) ;
-		case '%':return (int)a % (int)b;
-		case '^':return pow(a, b);
-		default:return a;
-		}
-	}
-
-	void doublepush(stack<long long> & st, string exp, int & pos)
-	{
-		string fl;
-		char c;
-		int i = 0;
-		while (!isOperate(exp[pos - 1]) && exp[pos - 1] != '\0')
-		{
-			c = exp[pos - 1];
-			fl.append(1, c);
-			pos++;
-		}
-		pos--;
-		st.push(atof(fl.c_str()));
-	}
-	long long arthimetic(string & exp, long long tar)
-	{
-
-		//OPTR是运算符栈，OPEN是运算数栈
-		int m, test;
-		exp.push_back('\0');
-		stack<char> OPTR; OPTR.push('#');
-		stack<long long> OPEN;
-		char ch = 'a', ch2, ch3;
-		long long c1, c2;
-		int pos = 0;
-
-
-
-		while (ch != '\0' || OPTR.top() != '#')
-		{
-			if (ch != '\0')ch = exp[pos++];
-			if (pos == 1 && ch == '+') { pos++; continue; }
-			if (pos == 1 && ch == '-') { exp.insert(0, 1, '0'); pos--; continue; }
-
-			if (!isOperate(ch)&&ch!='\0')
-			{
-				//pos是下一个
-				if (ch == 'x')OPEN.push(tar);
-				else if (ch == ' ');
-				else doublepush(OPEN, exp, pos);
-				continue;
-			}
-			switch (ch)
-			{
-			case '(':OPTR.push(ch); break;
-			case ')':
-				ch2 = OPTR.top();
-				while (ch2 != '(')
-				{
-					c1 = OPEN.top(); OPEN.pop();
-					c2 = OPEN.top(); OPEN.pop();
-					OPEN.push(CalcNum(c2, c1, ch2));
-					OPTR.pop();
-					ch2 = OPTR.top();
-				}
-				OPTR.pop();
-				break;
-			default:
-				ch2 = OPTR.top();
-				while (Rank(ch2) >= Rank(ch))
-				{
-					OPTR.pop();
-					c1 = OPEN.top(); OPEN.pop();
-					c2 = OPEN.top(); OPEN.pop();
-					OPEN.push(CalcNum(c2, c1, ch2));
-					ch2 = OPTR.top();
-				}
-				if (ch != '\0')OPTR.push(ch);
-				break;
-			}//switch
-		}//while
-		 //cout << ' ' << OPEN.top();
-		return OPEN.top();
 	}
 
 
+	
 public:
-
-	long long Calc(string inputFomu)
+	fomularCore(int Num)
 	{
-		return arthimetic(inputFomu, 1);
+		for (int i = 0; i < Num; i++)
+		{
+			fomularNode* temp = new fomularNode;
+			fomulars.push_back(temp);
+		}
+	}
+
+	~fomularCore()
+	{
+		int Num = fomulars.size();
+		for (int i = 0; i < Num; i++)
+		{
+			fomularNode* temp = fomulars[i];
+			deletefomu(temp);
+		}
+	}
+
+	double Calc(string inputFomu)
+	{
+		return arthimetic(inputFomu);
 	}
 	
+	bool Generate()
+	{
+		int num = fomulars.size();
+		string test;
+		for (int i = 0; i < num; i++)
+		{
+			int opnum = random(1,ops.size());
+
+			for (int j = 0; j < opnum; j++)
+			{
+				char num1 = random(1, 9)+'0';
+				char opch = ops[random(0, ops.size()-3)];
+				test.push_back(num1);
+				test.push_back(opch);
+			} 
+			char num1 = random(0, 9) + '0';
+			test.push_back(num1);
+
+
+			cout << test << endl;
+			test.clear();
+
+		}
+		return true;
+	}
+
 };
