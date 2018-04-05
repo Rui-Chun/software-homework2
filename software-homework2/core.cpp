@@ -181,3 +181,88 @@ vector<string> fomularCore::geneExp(int expNum)
 	return res;
 }
 
+bool fomularCore::toPostTree(vector<string> & fomus)
+{
+	vector<string> res;
+
+	string exp, numstr;
+	stack<char> OPTR; //运算符栈
+	stack<fomularNode*> OPEN;//结果栈
+	fomularNode *node1, *node2, *tempNode;
+
+
+	for (size_t i = 0; i < fomus.size(); i++)
+	{
+		exp = fomus[i];
+		//exp = "1-12*23+34*2"; 测试输入
+		//OPTR是运算符栈，OPEN是运算数栈
+		exp.push_back('\0');
+		OPTR.push('#');
+
+		char ch = 'a', ch2;//'a'to init set ch
+		int pos = 0;
+
+
+		while (ch != '\0' || OPTR.top() != '#')
+		{
+			if (ch != '\0')ch = exp[pos++];
+
+			if (pos == 1 && ch == '+') { pos++; continue; }
+			if (pos == 1 && ch == '-') { exp.insert(0, 1, '0'); pos--; continue; }
+			//to deal with  '+8+1' ‘-8+4’
+
+			if (!isOperate(ch) && ch != '\0')
+			{
+				//pos is the next position
+				if (ch == ' ');//skip space
+				else
+				{
+					while (!isOperate(exp[pos - 1]) && exp[pos - 1] != '\0')
+					{
+						numstr.push_back(exp[pos - 1]);
+						pos++;
+					}
+					pos--;
+					tempNode = new fomularNode(atoi(numstr.c_str()), false);
+					OPEN.push(tempNode);
+					numstr.clear();
+				}
+				continue;
+			}
+			switch (ch)
+			{
+			case '(':OPTR.push(ch); break;
+			case ')':
+				ch2 = OPTR.top();
+				while (ch2 != '(')
+				{
+					node1 = OPEN.top(); OPEN.pop();
+					node2 = OPEN.top(); OPEN.pop();
+					tempNode = new fomularNode(int(ch2), true, node2, node1);
+					OPEN.push(tempNode);
+					OPTR.pop();
+					ch2 = OPTR.top();
+				}
+				OPTR.pop();
+				break;
+			default:
+				ch2 = OPTR.top();
+				while (Rank(ch2) >= Rank(ch))
+				{
+					OPTR.pop();
+					node1 = OPEN.top(); OPEN.pop();
+					node2 = OPEN.top(); OPEN.pop();
+					tempNode = new fomularNode(int(ch2), true, node2, node1);
+					OPEN.push(tempNode);
+					ch2 = OPTR.top();
+				}
+				if (ch != '\0')OPTR.push(ch);
+				break;
+			}//switch
+		}//while
+		 //cout << ' ' << OPEN.top();
+		fomulars.push_back(OPEN.top());
+		OPEN.pop();
+	}
+	return true;
+}

@@ -9,14 +9,18 @@ using namespace std;
 class fomularNode
 {
 public:
-	char op;
-	int lopNum;
-	int ropNum;
-
+	int value;
+	bool chFlag;//if true，value is ascii
 	fomularNode* lchild;
 	fomularNode* rchild;
-	fomularNode() :op('\0'), lopNum(0), ropNum(0), lchild(NULL), rchild(NULL){}
-
+	fomularNode() :value(0),chFlag(false),lchild(NULL),rchild(NULL){}
+	fomularNode(int val, bool flag, fomularNode* lch=NULL, fomularNode* rch=NULL)
+	{
+		value = val;
+		chFlag = flag;
+		lchild = lch;
+		rchild = rch;
+	}
 };
 
 class fomularCore
@@ -60,83 +64,13 @@ private:
 
 	}
 
-	//原始表达式转后缀并建树(还没写好)
-	bool toPostTree(vector<string> fomus)
+	//原始表达式转后缀并建树
+	bool toPostTree(vector<string> & fomus);
+
+	//根据各种规则判断并处理二叉树
+	bool toJudgeTree()
 	{
-		vector<string> res;
-		string exp,num;
-		stack<char> OPTR; 
-		stack<char> OPEN;
 
-
-
-		for (size_t i = 0; i < fomus.size(); i++)
-		{
-			exp = fomus[i];
-			//OPTR是运算符栈，OPEN是运算数栈
-			exp.push_back('\0');
-			OPTR.push('#');
-
-			char ch = 'a', ch2;//'a'to init set ch
-			int pos = 0;
-
-
-			while (ch != '\0' || OPTR.top() != '#')
-			{
-				if (ch != '\0')ch = exp[pos++];
-
-				if (pos == 1 && ch == '+') { pos++; continue; }
-				if (pos == 1 && ch == '-') { exp.insert(0, 1, '0'); pos--; continue; }
-				//to deal with  '+8+1'
-
-				if (!isOperate(ch) && ch != '\0')
-				{
-					//pos is the next position
-					if (ch == ' ');//skip space
-					else
-					{
-						while (!isOperate(exp[pos - 1])&&exp[pos-1]!='\0')
-						{
-							OPEN.push(exp[pos - 1]);
-							pos++;
-						}
-						pos--;
-					}
-					continue;
-				}
-				switch (ch)
-				{
-				case '(':OPTR.push(ch); break;
-				case ')':
-					ch2 = OPTR.top();
-					while (ch2 != '(')
-					{
-						OPEN.push(ch2);
-						OPTR.pop();
-						ch2 = OPTR.top();
-					}
-					OPTR.pop();
-					break;
-				default:
-					ch2 = OPTR.top();
-					while (Rank(ch2) >= Rank(ch))
-					{
-						OPTR.pop();
-						OPEN.push(ch2);
-						ch2 = OPTR.top();
-					}
-					if (ch != '\0')OPTR.push(ch);
-					break;
-				}//switch
-			}//while
-			 //cout << ' ' << OPEN.top();
-			while (!OPEN.empty())
-			{
-				res[i].insert(0, 1, OPEN.top());
-				OPEN.pop();
-			}
-		}
-		return true;
 	}
 
 	vector<string> geneExp(int expNum);//随机生成原始表达式
@@ -147,11 +81,6 @@ public:
 		srand((unsigned int)(time(NULL)));
 
 		fomuNum = Num;
-		for (int i = 0; i < Num; i++)
-		{
-			fomularNode* temp = new fomularNode;
-			fomulars.push_back(temp);
-		}
 	}
 
 	~fomularCore()
@@ -179,6 +108,9 @@ public:
 		{
 			cout << arthimetic(rawFomu[i]) << endl;
 		}
+
+		toPostTree(rawFomu);
+
 		return true;
 	}
 
