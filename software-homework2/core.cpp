@@ -46,6 +46,7 @@ double fomularCore::CalcNum(double a, double b, char c)
 	}
 }
 
+//从string中读取一个double数并push
 void fomularCore::doublepush(stack<double> & st, string exp, int & pos)
 {
 	string fl;
@@ -61,6 +62,7 @@ void fomularCore::doublepush(stack<double> & st, string exp, int & pos)
 	pos--;
 	st.push(atof(fl.c_str()));
 }
+
 double fomularCore::arthimetic(string & exp)
 {
 
@@ -80,7 +82,7 @@ double fomularCore::arthimetic(string & exp)
 
 		if (pos == 1 && ch == '+') { pos++; continue; }
 		if (pos == 1 && ch == '-') { exp.insert(0, 1, '0'); pos--; continue; }
-		//to deal with  '+8+1'
+		//to deal with  '+8+1' '-8+2'
 
 		if (!isOperate(ch) && ch != '\0')
 		{
@@ -120,5 +122,62 @@ double fomularCore::arthimetic(string & exp)
 	}//while
 	 //cout << ' ' << OPEN.top();
 	return OPEN.top();
+}
+
+
+//随机生成原始表达式，个数为expNum
+vector<string> fomularCore::geneExp(int expNum)
+{
+	vector<string> res;
+	string temp;
+	int num, opch;
+	string numstr;
+	int loc1, loc2;//括号位置
+	int opnum,bracketNum;
+
+	for (int i = 0; i < expNum; i++)
+	{
+		opnum = random(1, maxopNum);//选定运算符个数
+
+		for (int j = 0; j < opnum; j++)
+		{
+			num = random(1, range);//暂时不管0.。
+			numstr = to_string(num);
+
+			opch = ops[random(0, ops.size() - 3)];//选择运算符
+			temp.append(numstr);
+			temp.push_back(opch);
+		}
+		num = random(1, range);//暂时不管0.。
+		numstr = to_string(num);
+		temp.append(numstr);
+
+		bracketNum = random(1, opnum);//选定括号对数
+
+		while (bracketNum-- >0)
+		{
+			loc1 = random(0, temp.size() - 1);
+			loc2 = random(loc1 + 1, temp.size());//括号位置
+
+			while (loc1 != 0 && (!isNum(temp[loc1]) || !isOperate(temp[loc1 - 1])))
+			{
+				loc1--; 
+			}
+			temp.insert(loc1, 1, '(');
+
+			while (loc2 != temp.size() && (!isNum(temp[loc2 - 1]) || !isOperate(temp[loc2])))
+			{
+				loc2++;
+			}//移动括号到合适位置并插入
+			temp.insert(loc2, 1, ')');
+		}
+
+
+		cout << temp << endl;
+		res.push_back(temp);
+		temp.clear();
+
+	}
+	return res;
 }
 
