@@ -173,7 +173,6 @@ vector<string> fomularCore::geneExp(int expNum)
 		}
 
 
-		cout << temp << endl;
 		res.push_back(temp);
 		temp.clear();
 
@@ -194,7 +193,7 @@ bool fomularCore::toPostTree(vector<string> & fomus)
 	for (size_t i = 0; i < fomus.size(); i++)
 	{
 		exp = fomus[i];
-		//exp = "1-12*23+34*2"; ²âÊÔÊäÈë
+		//exp = "2+3"; //²âÊÔÊäÈë
 		//OPTRÊÇÔËËã·ûÕ»£¬OPENÊÇÔËËãÊýÕ»
 		exp.push_back('\0');
 		OPTR.push('#');
