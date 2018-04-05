@@ -29,9 +29,9 @@ class fomularCore
 {
 private:
 	vector<fomularNode*> fomulars;
-	vector<char> ops = {'+','-','*','/','(',')'};//all ops
+	vector<char> ops = {'+','-','*','/','(',')'};//all ops 需要保持最后两个是括号
 	int maxopNum = 5;
-	int range = 100;//表达式每个数的上限
+	int range = 20;//表达式每个数的上限
 	int precise = 2;//输出精度（还没处理
 	int fomuNum;//表达式个数
 	double result[MAX_FOMU_NUM];
@@ -91,10 +91,32 @@ private:
 	//原始表达式转后缀并建树
 	bool toPostTree(vector<string> & fomus);
 
-
-	bool isSameTree(fomularNode* fo1,fomularNode* fo2)
+	bool isSameTree(fomularNode* ro1, fomularNode* ro2)
 	{
-		return false;
+		if (ro1 == NULL && ro2 == NULL)
+			return true;
+		else if (ro1 == NULL || ro2 == NULL)
+			return false;
+
+		if (ro1->value != ro1->value)
+			return false;
+		else
+			return isSameTree(ro1->rchild, ro2->rchild) && isSameTree(ro1->rchild, ro2->rchild);
+
+	}
+
+	bool isEqualTree(fomularNode* fo1,fomularNode* fo2)
+	{
+		bool bl1, bl2;
+		if (isSameTree(fo1, fo2))
+			return true;
+		else
+		{
+			bl1 = isEqualTree(fo1->lchild, fo2->lchild) && isEqualTree(fo1->rchild, fo2->rchild);
+			bl2 = isEqualTree(fo1->rchild, fo2->lchild) && isEqualTree(fo1->lchild, fo2->rchild);
+			return bl1 || bl2;
+		}
+
 	}
 
 
@@ -111,7 +133,7 @@ private:
 			okFlag[i] = computeTree(fomulars[i], result[i]);//判断无负
 			for (int j = 0; j < i; j++)                   //先判断答案是否一致，一致才有可能是相等表达式
 			{
-				if (result[i] == result[j] && isSameTree(fomulars[i], fomulars[j]))
+				if (result[i] == result[j] && isEqualTree(fomulars[i], fomulars[j]))
 				{
 					okFlag[i] = false;
 					break;
@@ -123,12 +145,55 @@ private:
 
 	vector<string> geneExp(int expNum);//随机生成原始表达式
 
-	vector<string> treeToStr(vector<fomularNode*> jFomus)
+	void treeTostr(fomularNode* ro,string &pre)
 	{
+
+		if (ro == NULL)return;
+		if (ro->chFlag == false)//只看左边就行，不考虑括号
+		{
+			pre.append(to_string(ro->value));
+			return;
+		}
+
+
+		if(ro->lchild->chFlag==false)
+			treeTostr(ro->lchild, pre);
+		else if (Rank(ro->value) > Rank(ro->lchild->value))
+			{
+			pre.push_back('(');
+			treeTostr(ro->lchild, pre);
+			pre.push_back(')');
+			}
+		else 
+			treeTostr(ro->lchild, pre);
+
+		pre.push_back(char(ro->value));
+
+		if (ro->rchild->chFlag == false)
+			treeTostr(ro->rchild, pre);
+		else if (Rank(ro->value) >= Rank(ro->rchild->value))
+		{
+			pre.push_back('(');
+			treeTostr(ro->rchild, pre);
+			pre.push_back(')');
+		}
+		else
+			treeTostr(ro->rchild, pre);
+
+		return;
+	}
+
+	vector<string> fomusToStr(vector<fomularNode*> jFomus)
+	{
+		string tempstr;
+		vector<string> outstr;
 		for (int i = 0; i < fomuNum; i++)
 		{
-
+			treeTostr(jFomus[i], tempstr);
+			outstr.push_back(tempstr);
+			tempstr.clear();
 		}
+		return outstr;
 	}
 
 public:
@@ -154,14 +219,16 @@ public:
 		return arthimetic(inputFomu);
 	}
 	
-	bool Generate()
+	vector<string> Generate()
 	{
 		//以下是测试
 		vector<string> rawFomu;
 		vector<fomularNode*> judgedFomu;
+		vector<string> finalFomu;
 		double temp;
 
 		rawFomu = geneExp(3*fomuNum);
+
 		for (size_t i = 0; i < rawFomu.size(); i++)
 		{
 			cout << rawFomu[i] << '=';
@@ -178,7 +245,11 @@ public:
 		}
 		
 		cout << endl << judgedFomu.size();
-		return true;
+		cout << endl << endl;
+
+		finalFomu=fomusToStr(judgedFomu);
+
+		return finalFomu;
 	}
 
 };
