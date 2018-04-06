@@ -199,7 +199,10 @@ bool fomularCore::computeTree(fomularNode* ro, double &res)//¼ÆËã±í´ïÊ½¶ş²æÊ÷£¬È
 	else
 	{
 		res = ro->value;
-		return true;
+		if (res < MaxRange)
+			return true;
+		else
+			return false;
 	}
 }
 
