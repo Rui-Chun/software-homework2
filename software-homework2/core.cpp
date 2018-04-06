@@ -124,6 +124,84 @@ double fomularCore::arthimetic(string & exp)
 	return OPEN.top();
 }
 
+int fomularCore::findMultiple(string instr)
+{
+	string tpnum;
+	int mulNum = 1;
+	int inerMul = 1;
+	int lenstr = instr.size();
+	int bacNum = 0;
+	for (int i = 0; i < lenstr; i++)
+	{
+		if (instr[i] == '/')
+		{
+			if (instr[i + 1] == '(')
+			{
+				i++;
+
+				while (i <= lenstr)
+				{
+					if (instr[i] == '(')bacNum++;
+					if (instr[i] == ')')bacNum--;
+					if (instr[i] == '/')inerMul *= findMultiple(instr.substr(i));
+
+					tpnum.push_back(instr[i]);
+					if (bacNum == 0)break;
+					i++;
+				}
+			}
+			else
+			{
+				while (isNum(instr[i + 1]) && i + 1 <= lenstr)
+				{
+					tpnum.push_back(instr[i + 1]);
+					i++;
+				}
+
+			}
+			tpnum.insert(0, 1, '(');
+			mulNum *= int(arthimetic(tpnum.append(")*").append(to_string(int(inerMul)))));//求得最大的分母，之后再约
+			tpnum.clear();
+		}
+	}
+	return mulNum;
+}
+bool fomularCore::withDot(string str)
+{
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		if (str[i] == '.')
+			return true;
+	}
+	return false;
+}
+int fomularCore::gcd(int a, int b)
+{
+	if (b != 0)
+		return gcd(b, a % b);
+	else
+		return a;
+}
+
+bool fomularCore::computeTree(fomularNode* ro, double &res)//计算表达式二叉树，若不违反非负，返回res结果
+{
+	double re1 = 0, re2 = 0;
+	bool b1, b2;
+	if (ro == NULL) return false;
+	if (ro->chFlag == true)
+	{
+		b1 = computeTree(ro->lchild, re1);
+		b2 = computeTree(ro->rchild, re2);
+		res = CalcNum(re1, re2, char(ro->value));
+		if (res < 0)return false;
+		else return b1 && b2;
+	}
+	else
+	{
+		res = ro->value;
+		return true;
+	}
+}
 
 //随机生成原始表达式，个数为expNum
 vector<string> fomularCore::geneExp(int expNum)
@@ -264,4 +342,113 @@ bool fomularCore::toPostTree(vector<string> & fomus)
 		OPEN.pop();
 	}
 	return true;
+}
+
+bool fomularCore::isSameTree(fomularNode* ro1, fomularNode* ro2)
+{
+	if (ro1 == NULL && ro2 == NULL)
+		return true;
+	else if (ro1 == NULL || ro2 == NULL)
+		return false;
+
+	if (ro2->value != ro1->value)
+		return false;
+	else
+		return isSameTree(ro1->rchild, ro2->rchild) && isSameTree(ro1->lchild, ro2->lchild);
+
+}
+
+bool fomularCore::isEqualTree(fomularNode* fo1, fomularNode* fo2)
+{
+	if (fo1 == NULL && fo2 == NULL)
+		return true;
+	else if (fo1 == NULL || fo2 == NULL)
+		return false;
+
+	bool bl1, bl2;
+	if (isSameTree(fo1, fo2))//fo2=NULL
+		return true;
+	else
+	{
+		bl1 = isEqualTree(fo1->lchild, fo2->lchild) && isEqualTree(fo1->rchild, fo2->rchild);
+		bl2 = isEqualTree(fo1->rchild, fo2->lchild) && isEqualTree(fo1->lchild, fo2->rchild);
+		return (bl1 || bl2) && (fo1->value == fo2->value);
+	}
+
+}
+
+bool fomularCore::toJudgeTree()
+{
+	int rfomuNum = fomulars.size();
+
+	int regene = 0;
+
+	for (int i = 0; i < rfomuNum; i++)
+	{
+		okFlag[i] = computeTree(fomulars[i], result[i]);//判断无负
+		for (int j = 0; j < i; j++)                   //先判断答案是否一致，一致才有可能是相等表达式
+		{
+			if (result[i] == result[j])
+			{
+				if (isEqualTree(fomulars[i], fomulars[j]))
+				{
+					okFlag[i] = false;
+					isEqualTree(fomulars[i], fomulars[j]);
+					break;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+void fomularCore::treeTostr(fomularNode* ro, string &pre)
+{
+
+	if (ro == NULL)return;
+	if (ro->chFlag == false)//只看左边就行，不考虑括号
+	{
+		pre.append(to_string(ro->value));
+		return;
+	}
+
+
+	if (ro->lchild->chFlag == false)
+		treeTostr(ro->lchild, pre);
+	else if (Rank(ro->value) > Rank(ro->lchild->value))
+	{
+		pre.push_back('(');
+		treeTostr(ro->lchild, pre);
+		pre.push_back(')');
+	}
+	else
+		treeTostr(ro->lchild, pre);
+
+	pre.push_back(char(ro->value));
+
+	if (ro->rchild->chFlag == false)
+		treeTostr(ro->rchild, pre);
+	else if (Rank(ro->value) >= Rank(ro->rchild->value))
+	{
+		pre.push_back('(');
+		treeTostr(ro->rchild, pre);
+		pre.push_back(')');
+	}
+	else
+		treeTostr(ro->rchild, pre);
+
+	return;
+}
+
+vector<string> fomularCore::fomusToStr(vector<fomularNode*> jFomus)
+{
+	string tempstr;
+	vector<string> outstr;
+	for (int i = 0; i < fomuNum; i++)
+	{
+		treeTostr(jFomus[i], tempstr);
+		outstr.push_back(tempstr);
+		tempstr.clear();
+	}
+	return outstr;
 }
