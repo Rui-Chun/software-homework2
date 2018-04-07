@@ -34,7 +34,6 @@ private:
 	int range = 10;//表达式每个数的上限
 	int precise = 2;//输出精度（还没处理
 	int fomuNum;//表达式个数
-	long MaxRange = 100000;//结果最大范围
 	bool fractionflag = true;
 	double result[MAX_FOMU_NUM];//原始字符串运算结果
 	bool okFlag[MAX_FOMU_NUM];//判断原始字符串是否符合要求
@@ -116,7 +115,7 @@ public:
 		int multi;
 		int tp;
 		string tpFomu;
-		double res;
+		long double res;
 		multi=findMultiple(inputFomu);
 
 		if (fractionflag&&multi != 1&&!withDot(inputFomu))//有浮点'.'就认为不是分数运算
