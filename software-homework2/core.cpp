@@ -193,7 +193,7 @@ bool fomularCore::computeTree(fomularNode* ro, double &res)//¼ÆËã±í´ïÊ½¶ş²æÊ÷£¬È
 		b1 = computeTree(ro->lchild, re1);
 		b2 = computeTree(ro->rchild, re2);
 		res = CalcNum(re1, re2, char(ro->value));
-		if (res < 0)return false;
+		if (res < 0||res>MaxRange)return false;
 		else return b1 && b2;
 	}
 	else

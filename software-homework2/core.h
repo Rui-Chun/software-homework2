@@ -4,7 +4,7 @@
 #include <stack>
 #include <algorithm>
 #include <ctime>
-#define MAX_FOMU_NUM 200
+#define MAX_FOMU_NUM 2000
 
 using namespace std;
 
@@ -34,6 +34,7 @@ private:
 	int range = 10;//表达式每个数的上限
 	int precise = 2;//输出精度（还没处理
 	int fomuNum;//表达式个数
+	long MaxRange = 100000;
 	bool fractionflag = true;
 	double result[MAX_FOMU_NUM];//原始字符串运算结果
 	bool okFlag[MAX_FOMU_NUM];//判断原始字符串是否符合要求
