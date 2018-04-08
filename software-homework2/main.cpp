@@ -5,15 +5,10 @@ using namespace std;
 
 int main()
 {
-	fomularCore test(3000);
-	string teststr;
-	while (true)
-	{
-	//cin>>teststr;
-	//cout<<test.Calc(teststr)<<endl;
-		test.Generate();
-		break;
-	}
+	fomularCore test(300);//初始化传入式子个数
+
+	test.Generate();
+
 
 
 	return 0;

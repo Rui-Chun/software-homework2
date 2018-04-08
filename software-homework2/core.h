@@ -160,8 +160,6 @@ public:
 		vector<string> finalFomu;
 
 
-		
-
 		rawFomu = geneExp(3*fomuNum);//3是可选参数，保证能选出符合要求个数的表达式
 
 		toPostTree(rawFomu);//建树
@@ -178,12 +176,17 @@ public:
 
 		for (size_t i = 0; i < finalFomu.size(); i++)
 		{
-			cout << finalFomu[i] << '=';
-			cout << Calc(finalFomu[i]) << endl;//测试输出
+			//cout << finalFomu[i] << '=';
+			//cout << Calc(finalFomu[i]) << endl;//测试输出
 			finalRes.push_back(Calc(finalFomu[i]));
 		}
 
 		return finalFomu;
+	}
+
+	vector<string> getRes()
+	{
+		return finalRes;
 	}
 
 	bool settingXml(string path)
