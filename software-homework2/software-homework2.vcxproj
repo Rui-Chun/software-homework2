@@ -74,7 +74,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -92,7 +92,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -115,11 +115,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Desktop\core\main.cpp" />
+    <ClCompile Include="..\..\..\..\Desktop\core\tinystr.cpp" />
+    <ClCompile Include="..\..\..\..\Desktop\core\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\..\Desktop\core\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\..\Desktop\core\tinyxmlparser.cpp" />
     <ClCompile Include="core.cpp" />
-    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core.h" />
+    <ClInclude Include="..\..\..\..\Desktop\core\core.h" />
+    <ClInclude Include="..\..\..\..\Desktop\core\tinystr.h" />
+    <ClInclude Include="..\..\..\..\Desktop\core\tinyxml.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

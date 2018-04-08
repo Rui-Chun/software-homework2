@@ -8,6 +8,15 @@
 
 using namespace std;
 
+void ReadXml(string path, int& QuestionNum, 
+int & OperandNum, int & NumRange, string & OperatorKind,
+bool & ProperFraction, bool & Decimal, bool & Power);
+//读取当前目录下path对应的xml文件信息，格式按照info.xml
+//注意QuestionNum，OperandNum，NumRange必须要求是正整数，而且开头不能是0，如果是010，会报错
+//OperatorKind中运算符号顺序：+-*/(  
+//顺序错就会报错
+//ProperFraction,Decimal,Power必须是0或者1
+//文件中不能存在其他信息，否则会报错 
 class fomularNode
 {
 public:
@@ -81,7 +90,6 @@ private:
 	bool isSameTree(fomularNode* ro1, fomularNode* ro2);
 
 	bool isEqualTree(fomularNode* fo1, fomularNode* fo2);
-
 
 	//根据各种规则判断并处理二叉树
 	//采用先随机生成两倍或以上的原始表达式，再从里面挑选符合要求的,由okFlag决定

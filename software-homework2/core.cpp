@@ -3,7 +3,11 @@
 #include <string>
 #include <stack>
 #include <algorithm>
+#include <Regex>
 #include "core.h"
+#include "tinystr.h"
+#include "tinyxml.h"
+ #include "stdlib.h"
 
 bool fomularCore::isOperate(char ch)
 {
@@ -454,4 +458,76 @@ vector<string> fomularCore::fomusToStr(vector<fomularNode*> jFomus)
 		tempstr.clear();
 	}
 	return outstr;
+}
+
+void ReadXml(string path, int& QuestionNum, 
+int & OperandNum, int & NumRange, string & OperatorKind,
+bool & ProperFraction, bool & Decimal, bool & Power)
+{
+	TiXmlDocument doc(path.c_str());
+	string tmp;
+	bool loadOkay = doc.LoadFile();
+	if (!loadOkay) 
+	{      
+      printf( "Could not load test file %s. Error='%s'. Exiting.\n", path.c_str(),doc.ErrorDesc() );  
+      exit( 1 );  
+    } 
+   
+    regex isNum("^[1-9]+[0-9]*$");
+	regex isOp("^[+]?[-]?[*]?[/]?[(]?$");
+	regex isBool("^[0-1]$");
+	bool isnum;
+	bool isop;
+	bool isbool;
+	
+	
+    TiXmlElement* root = doc.RootElement();
+    
+    TiXmlElement* NextElement = root->FirstChildElement();
+    tmp = NextElement->GetText();
+    isnum = regex_match(tmp.begin(),tmp.end(),isNum);
+    assert(isnum == true);
+    QuestionNum = atoi(tmp.c_str());
+    
+    NextElement = NextElement->NextSiblingElement();
+    tmp = NextElement->GetText();
+    isnum = regex_match(tmp.begin(),tmp.end(),isNum);
+    assert(isnum == true);
+    OperandNum = atoi(tmp.c_str());
+    
+    NextElement = NextElement->NextSiblingElement();
+    tmp = NextElement->GetText();
+    isnum = regex_match(tmp.begin(),tmp.end(),isNum);
+    assert(isnum == true);
+    NumRange = atoi(tmp.c_str());
+    
+    NextElement = NextElement->NextSiblingElement();
+    tmp = NextElement->GetText();
+    assert(tmp.size() != 0);
+    isop = regex_match(tmp.begin(),tmp.end(),isOp);
+    assert(isop == true);
+    OperatorKind = tmp;
+    
+    NextElement = NextElement->NextSiblingElement();
+    tmp = NextElement->GetText();
+    isbool = regex_match(tmp.begin(),tmp.end(),isBool);
+    assert(isbool == true);
+    ProperFraction = atoi(tmp.c_str());
+    
+    NextElement = NextElement->NextSiblingElement();
+    tmp = NextElement->GetText();
+    isbool = regex_match(tmp.begin(),tmp.end(),isBool);
+    assert(isbool == true);
+    Decimal = atoi(tmp.c_str());
+    
+    NextElement = NextElement->NextSiblingElement();
+    tmp = NextElement->GetText();
+    isbool = regex_match(tmp.begin(),tmp.end(),isBool);
+    assert(isbool == true);
+    Power = atoi(tmp.c_str());
+    
+    NextElement = NextElement->NextSiblingElement();
+    assert(NextElement == NULL);
+    
+
 }
