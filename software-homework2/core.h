@@ -4,9 +4,19 @@
 #include <stack>
 #include <algorithm>
 #include <ctime>
-#define MAX_FOMU_NUM 2000
+#define MAX_FOMU_NUM 35000
 
 using namespace std;
+
+void ReadXml(string path, int& QuestionNum,
+	int & OperandNum, int & NumRange, string & OperatorKind,
+	bool & ProperFraction, bool & Decimal, bool & Power);
+//读取当前目录下path对应的xml文件信息，格式按照info.xml
+//注意QuestionNum，OperandNum，NumRange必须要求是正整数，而且开头不能是0，如果是010，会报错
+//OperatorKind中运算符号顺序：+-*/(  
+//顺序错就会报错
+//ProperFraction,Decimal,Power必须是0或者1
+//文件中不能存在其他信息，否则会报错 
 
 class fomularNode
 {
@@ -31,7 +41,7 @@ private:
 	vector<fomularNode*> fomulars;
 	vector<char> ops = {'+','-','*','/','^','(',')'};//all ops 需要保持最后两个是括号
 	int maxopNum = 5;
-	int range = 10;//表达式每个数的上限
+	int range = 20;//表达式每个数的上限
 	int precise = 2;//输出精度（还没处理
 	int fomuNum;//表达式个数
 	long MaxRange = 100000;
@@ -116,7 +126,7 @@ public:
 		int multi;
 		int tp;
 		string tpFomu;
-		long double res;
+		long res;
 		multi=findMultiple(inputFomu);
 
 		if (fractionflag&&multi != 1&&!withDot(inputFomu))//有浮点'.'就认为不是分数运算

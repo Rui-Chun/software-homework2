@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-	fomularCore test(100);
+	fomularCore test(3000);
 	string teststr;
 	while (true)
 	{

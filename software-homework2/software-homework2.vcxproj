@@ -74,7 +74,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -115,10 +115,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinystr.cpp" />
+    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxmlparser.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Desktop\tinyxml\tinystr.h" />
+    <ClInclude Include="..\..\..\..\Desktop\tinyxml\tinyxml.h" />
     <ClInclude Include="core.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

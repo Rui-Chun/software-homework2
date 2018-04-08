@@ -3,7 +3,11 @@
 #include <string>
 #include <stack>
 #include <algorithm>
+#include <Regex>
 #include "core.h"
+#include "tinystr.h"
+#include "tinyxml.h"
+#include "stdlib.h"
 
 bool fomularCore::isOperate(char ch)
 {
@@ -98,7 +102,11 @@ double fomularCore::arthimetic(string & exp)
 			ch2 = OPTR.top();
 			while (ch2 != '(')
 			{
+				if (OPEN.empty())
+					throw "wrong fomular format";
 				c1 = OPEN.top(); OPEN.pop();
+				if (OPEN.empty())
+					throw "wrong fomular format";
 				c2 = OPEN.top(); OPEN.pop();
 				OPEN.push(CalcNum(c2, c1, ch2));
 				OPTR.pop();
@@ -111,7 +119,11 @@ double fomularCore::arthimetic(string & exp)
 			while (Rank(ch2) >= Rank(ch))
 			{
 				OPTR.pop();
+				if (OPEN.empty())
+					throw "wrong fomular format";
 				c1 = OPEN.top(); OPEN.pop();
+				if (OPEN.empty())
+					throw "wrong fomular format";
 				c2 = OPEN.top(); OPEN.pop();
 				OPEN.push(CalcNum(c2, c1, ch2));
 				ch2 = OPTR.top();
@@ -164,6 +176,8 @@ int fomularCore::findMultiple(string instr)
 			tpnum.clear();
 		}
 	}
+	if (mulNum == 0||mulNum>MaxRange)
+		return 1;
 	return mulNum;
 }
 bool fomularCore::withDot(string str)
@@ -452,3 +466,78 @@ vector<string> fomularCore::fomusToStr(vector<fomularNode*> jFomus)
 	}
 	return outstr;
 }
+
+
+
+void ReadXml(string path, int& QuestionNum,
+	int & OperandNum, int & NumRange, string & OperatorKind,
+	bool & ProperFraction, bool & Decimal, bool & Power)
+{
+	TiXmlDocument doc(path.c_str());
+	string tmp;
+	bool loadOkay = doc.LoadFile();
+	if (!loadOkay)
+	{
+		printf("Could not load test file %s. Error='%s'. Exiting.\n", path.c_str(), doc.ErrorDesc());
+		exit(1);
+	}
+
+	regex isNum("^[1-9]+[0-9]*$");
+	regex isOp("^[+]?[-]?[*]?[/]?[(]?$");
+	regex isBool("^[0-1]$");
+	bool isnum;
+	bool isop;
+	bool isbool;
+
+
+	TiXmlElement* root = doc.RootElement();
+
+	TiXmlElement* NextElement = root->FirstChildElement();
+	tmp = NextElement->GetText();
+	isnum = regex_match(tmp.begin(), tmp.end(), isNum);
+	assert(isnum == true);
+	QuestionNum = atoi(tmp.c_str());
+
+	NextElement = NextElement->NextSiblingElement();
+	tmp = NextElement->GetText();
+	isnum = regex_match(tmp.begin(), tmp.end(), isNum);
+	assert(isnum == true);
+	OperandNum = atoi(tmp.c_str());
+
+	NextElement = NextElement->NextSiblingElement();
+	tmp = NextElement->GetText();
+	isnum = regex_match(tmp.begin(), tmp.end(), isNum);
+	assert(isnum == true);
+	NumRange = atoi(tmp.c_str());
+
+	NextElement = NextElement->NextSiblingElement();
+	tmp = NextElement->GetText();
+	assert(tmp.size() != 0);
+	isop = regex_match(tmp.begin(), tmp.end(), isOp);
+	assert(isop == true);
+	OperatorKind = tmp;
+
+	NextElement = NextElement->NextSiblingElement();
+	tmp = NextElement->GetText();
+	isbool = regex_match(tmp.begin(), tmp.end(), isBool);
+	assert(isbool == true);
+	ProperFraction = atoi(tmp.c_str());
+
+	NextElement = NextElement->NextSiblingElement();
+	tmp = NextElement->GetText();
+	isbool = regex_match(tmp.begin(), tmp.end(), isBool);
+	assert(isbool == true);
+	Decimal = atoi(tmp.c_str());
+
+	NextElement = NextElement->NextSiblingElement();
+	tmp = NextElement->GetText();
+	isbool = regex_match(tmp.begin(), tmp.end(), isBool);
+	assert(isbool == true);
+	Power = atoi(tmp.c_str());
+
+	NextElement = NextElement->NextSiblingElement();
+	assert(NextElement == NULL);
+
+
+}
+
