@@ -471,7 +471,7 @@ vector<string> fomularCore::fomusToStr(vector<fomularNode*> jFomus)
 
 void ReadXml(string path, int& QuestionNum,
 	int & OperandNum, int & NumRange, string & OperatorKind,
-	bool & ProperFraction, bool & Decimal, bool & Power)
+	bool & ProperFraction, int & Precise)
 {
 	TiXmlDocument doc(path.c_str());
 	string tmp;
@@ -525,15 +525,9 @@ void ReadXml(string path, int& QuestionNum,
 
 	NextElement = NextElement->NextSiblingElement();
 	tmp = NextElement->GetText();
-	isbool = regex_match(tmp.begin(), tmp.end(), isBool);
-	assert(isbool == true);
-	Decimal = atoi(tmp.c_str());
-
-	NextElement = NextElement->NextSiblingElement();
-	tmp = NextElement->GetText();
-	isbool = regex_match(tmp.begin(), tmp.end(), isBool);
-	assert(isbool == true);
-	Power = atoi(tmp.c_str());
+	isnum = regex_match(tmp.begin(), tmp.end(), isNum);
+	assert(isnum == true);
+	Precise = atoi(tmp.c_str());
 
 	NextElement = NextElement->NextSiblingElement();
 	assert(NextElement == NULL);

@@ -10,10 +10,10 @@ using namespace std;
 
 void ReadXml(string path, int& QuestionNum,
 	int & OperandNum, int & NumRange, string & OperatorKind,
-	bool & ProperFraction, bool & Decimal, bool & Power);
+	bool & ProperFraction, int &Precise);
 //读取当前目录下path对应的xml文件信息，格式按照info.xml
 //注意QuestionNum，OperandNum，NumRange必须要求是正整数，而且开头不能是0，如果是010，会报错
-//OperatorKind中运算符号顺序：+-*/(  
+//OperatorKind中运算符号顺序：+-*/^()  
 //顺序错就会报错
 //ProperFraction,Decimal,Power必须是0或者1
 //文件中不能存在其他信息，否则会报错 
@@ -40,11 +40,12 @@ class fomularCore
 private:
 	vector<fomularNode*> fomulars;
 	vector<char> ops = {'+','-','*','/','^','(',')'};//all ops 需要保持最后两个是括号
+	vector<string> finalRes;
 	int maxopNum = 5;
 	int range = 20;//表达式每个数的上限
 	int precise = 2;//输出精度（还没处理
 	int fomuNum;//表达式个数
-	long MaxRange = 100000;
+	int MaxRange = 100000;
 	bool fractionflag = true;
 	double result[MAX_FOMU_NUM];//原始字符串运算结果
 	bool okFlag[MAX_FOMU_NUM];//判断原始字符串是否符合要求
@@ -179,14 +180,27 @@ public:
 		{
 			cout << finalFomu[i] << '=';
 			cout << Calc(finalFomu[i]) << endl;//测试输出
+			finalRes.push_back(Calc(finalFomu[i]));
 		}
 
 		return finalFomu;
 	}
 
-	bool setting()
+	bool settingXml(string path)
 	{
-
+		string tpop;
+		ReadXml(path, fomuNum, maxopNum, MaxRange, tpop, fractionflag, precise);
+		for (int i = 0; i < ops.size(); i++)
+		{
+			ops.push_back(tpop[i]);
+		}
 	}
-
+	bool setting(int foN,int maxopN,int MaxR,vector<char> op,bool fraction,int preci)
+	{
+		fomuNum = foN;
+		MaxRange = MaxR;
+		ops = op;
+		fractionflag = fraction;
+		precise = preci;
+	}
 };
