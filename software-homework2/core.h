@@ -192,18 +192,22 @@ public:
 	bool settingXml(string path)
 	{
 		string tpop;
-		ReadXml(path, fomuNum, maxopNum, MaxRange, tpop, fractionflag, precise);
+		ReadXml(path, fomuNum, maxopNum, range, tpop, fractionflag, precise);
 		for (size_t i = 0; i < ops.size(); i++)
 		{
 			ops.push_back(tpop[i]);
 		}
+		return true;
 	}
 	bool setting(int foN,int maxopN,int MaxR,vector<char> op,bool fraction,int preci)
 	{
 		fomuNum = foN;
-		MaxRange = MaxR;
+		maxopNum = maxopN;
+		range = MaxR;
 		ops = op;
 		fractionflag = fraction;
 		precise = preci;
+		return true;
 	}
+
 };
