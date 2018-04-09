@@ -39,14 +39,14 @@ class fomularCore
 {
 private:
 	vector<fomularNode*> fomulars;
-	vector<char> ops = {'+','-','*','/','^','(',')'};//all ops 需要保持最后两个是括号
-	vector<string> finalRes;
-	int maxopNum = 5;
-	int range = 20;//表达式每个数的上限
-	int precise = 2;//输出精度（还没处理
+	vector<char> ops = {'+','-','*','/','^','(',')'};//all ops 需要保持最后两个是括号！
+	vector<string> finalRes;//最终结果，和Generate返回值一一对应
+	int maxopNum = 5;//每个表达式中运算符个数
+	int range = 100;//操作数数的上限
+	int precise = 2;//输出精度（最大为6）
 	int fomuNum;//表达式个数
-	int MaxRange = 100000;
-	bool fractionflag = true;
+	int MaxRange = 100000;//运算中出现的最大数
+	bool fractionflag = true;//是否进行分数运算
 	double result[MAX_FOMU_NUM];//原始字符串运算结果
 	bool okFlag[MAX_FOMU_NUM];//判断原始字符串是否符合要求
 
@@ -193,7 +193,7 @@ public:
 	{
 		string tpop;
 		ReadXml(path, fomuNum, maxopNum, MaxRange, tpop, fractionflag, precise);
-		for (int i = 0; i < ops.size(); i++)
+		for (size_t i = 0; i < ops.size(); i++)
 		{
 			ops.push_back(tpop[i]);
 		}

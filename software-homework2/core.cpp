@@ -226,6 +226,7 @@ vector<string> fomularCore::geneExp(int expNum)
 	string numstr;
 	int loc1, loc2;//括号位置
 	int opnum,bracketNum;
+	bool isPower = false;
 
 	for (int i = 0; i < expNum; i++)
 	{
@@ -233,10 +234,20 @@ vector<string> fomularCore::geneExp(int expNum)
 
 		for (int j = 0; j < opnum; j++)
 		{
-			num = random(1, range);//暂时不管0.。
-			numstr = to_string(num);
-
+			if (isPower == false)
+			{
+				num = random(1, range);//暂时不管0.。
+				numstr = to_string(num);
+			}
+			else
+			{
+				num = random(1, 5);//暂时不管0.。
+				numstr = to_string(num);
+				isPower = false;
+			}
 			opch = ops[random(0, ops.size() - 3)];//选择运算符
+			if (char(opch) == '^')
+				isPower = true;
 			temp.append(numstr);
 			temp.push_back(opch);
 		}

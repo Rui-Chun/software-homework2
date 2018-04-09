@@ -5,9 +5,9 @@ using namespace std;
 
 int main()
 {
-	fomularCore test(300);//初始化传入式子个数
-
-	test.Generate();
+	fomularCore test(3000);//初始化传入式子个数
+	vector<string> out;
+	out=test.Generate();
 
 
 
