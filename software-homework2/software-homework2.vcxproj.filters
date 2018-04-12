@@ -21,16 +21,16 @@
     <ClCompile Include="core.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinystr.cpp">
+    <ClCompile Include="tinystr.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxml.cpp">
+    <ClCompile Include="tinyxml.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxmlerror.cpp">
+    <ClCompile Include="tinyxmlerror.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxmlparser.cpp">
+    <ClCompile Include="tinyxmlparser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -115,12 +115,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinystr.cpp" />
-    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxml.cpp" />
-    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxmlerror.cpp" />
-    <ClCompile Include="..\..\..\..\Desktop\tinyxml\tinyxmlparser.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="tinystr.cpp" />
+    <ClCompile Include="tinyxml.cpp" />
+    <ClCompile Include="tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Desktop\tinyxml\tinystr.h" />

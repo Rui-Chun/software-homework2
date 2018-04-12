@@ -31,7 +31,7 @@ int fomularCore::Rank(char s)
 	case '*':
 	case '%':
 	case '/':return 2;
-	case '^':return 3; 
+	case '^':return 3;
 	default:return 4;
 	}
 }
@@ -176,7 +176,7 @@ int fomularCore::findMultiple(string instr)
 			tpnum.clear();
 		}
 	}
-	if (mulNum == 0||mulNum>MaxRange)
+	if (mulNum == 0 || mulNum>MaxRange)
 		return 1;
 	return mulNum;
 }
@@ -207,7 +207,7 @@ bool fomularCore::computeTree(fomularNode* ro, double &res)//º∆À„±Ì¥Ô Ω∂˛≤Ê ˜£¨»
 		b1 = computeTree(ro->lchild, re1);
 		b2 = computeTree(ro->rchild, re2);
 		res = CalcNum(re1, re2, char(ro->value));
-		if (res < 0||res>MaxRange)return false;
+		if (res < 0 || res>MaxRange)return false;
 		else return b1 && b2;
 	}
 	else
@@ -225,7 +225,7 @@ vector<string> fomularCore::geneExp(int expNum)
 	int num, opch;
 	string numstr;
 	int loc1, loc2;//¿®∫≈Œª÷√
-	int opnum,bracketNum;
+	int opnum, bracketNum;
 	bool isPower = false;
 
 	for (int i = 0; i < expNum; i++)
@@ -264,7 +264,7 @@ vector<string> fomularCore::geneExp(int expNum)
 
 			while (loc1 != 0 && (!isNum(temp[loc1]) || !isOperate(temp[loc1 - 1])))
 			{
-				loc1--; 
+				loc1--;
 			}
 			temp.insert(loc1, 1, '(');
 

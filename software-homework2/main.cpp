@@ -8,7 +8,7 @@ int main()
 	fomularCore test(3000);//初始化传入式子个数
 	vector<string> out;
 	vector<string> outRes;
-	vector<char> ops = { '+','-','*','/','(',')' };
+	string ops="+-*/^()";
 	test.setting(300, 6, 20, ops, 1, 3);
 	out=test.Generate();
 	outRes = test.getRes();

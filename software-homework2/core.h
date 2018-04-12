@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -25,8 +27,8 @@ public:
 	bool chFlag;//if true，value is ascii
 	fomularNode* lchild;
 	fomularNode* rchild;
-	fomularNode() :value(0),chFlag(false),lchild(NULL),rchild(NULL){}
-	fomularNode(int val, bool flag, fomularNode* lch=NULL, fomularNode* rch=NULL)
+	fomularNode() :value(0), chFlag(false), lchild(NULL), rchild(NULL) {}
+	fomularNode(int val, bool flag, fomularNode* lch = NULL, fomularNode* rch = NULL)
 	{
 		value = val;
 		chFlag = flag;
@@ -39,7 +41,7 @@ class fomularCore
 {
 private:
 	vector<fomularNode*> fomulars;
-	vector<char> ops = {'+','-','*','/','^','(',')'};//all ops 需要保持最后两个是括号！
+	vector<char> ops = { '+','-','*','/','^','(',')' };//all ops 需要保持最后两个是括号！
 	vector<string> finalRes;//最终结果，和Generate返回值一一对应
 	int maxopNum = 5;//每个表达式中运算符个数
 	int range = 100;//操作数数的上限
@@ -105,7 +107,7 @@ private:
 	vector<string> fomusToStr(vector<fomularNode*> jFomus);
 
 public:
-	fomularCore(int Num=10)//Num是要生成的表达式个数
+	fomularCore(int Num = 10)//Num是要生成的表达式个数
 	{
 		srand((unsigned int)(time(NULL)));
 
@@ -128,30 +130,30 @@ public:
 		int tp;
 		string tpFomu;
 		long res;
-		multi=findMultiple(inputFomu);
+		multi = findMultiple(inputFomu);
 
-		if (fractionflag&&multi != 1&&!withDot(inputFomu))//有浮点'.'就认为不是分数运算
+		if (fractionflag&&multi != 1 && !withDot(inputFomu))//有浮点'.'就认为不是分数运算
 		{
 			tpFomu.append(to_string(multi));
 			tpFomu.append("*(");
 			tpFomu.append(inputFomu).push_back(')');
 			res = int(arthimetic(tpFomu));
 			tp = gcd(res, multi);
-			tpFomu = to_string(int(res/tp));
-			if(multi/tp!=1)
-				tpFomu.append("/").append(to_string(multi/tp));
+			tpFomu = to_string(int(res / tp));
+			if (multi / tp != 1)
+				tpFomu.append("/").append(to_string(multi / tp));
 			return tpFomu;
 		}
 		else
 		{
 			//这里似乎有概率访问越界
-			tpFomu=to_string(arthimetic(inputFomu));
+			tpFomu = to_string(arthimetic(inputFomu));
 			for (int i = 0; i < 6 - precise; i++)
 				tpFomu.pop_back();
 			return tpFomu;
 		}
 	}
-	
+
 	vector<string> Generate()
 	{
 
@@ -160,7 +162,7 @@ public:
 		vector<string> finalFomu;
 
 
-		rawFomu = geneExp(3*fomuNum);//3是可选参数，保证能选出符合要求个数的表达式
+		rawFomu = geneExp(3 * fomuNum);//3是可选参数，保证能选出符合要求个数的表达式
 
 		toPostTree(rawFomu);//建树
 		toJudgeTree();//判断是否符合要求
@@ -170,9 +172,9 @@ public:
 			if (okFlag[i] == true)
 				judgedFomu.push_back(fomulars[i]);//选出合适的树
 		}
-		
 
-		finalFomu=fomusToStr(judgedFomu);//树转表达式，去除多余括号
+
+		finalFomu = fomusToStr(judgedFomu);//树转表达式，去除多余括号
 
 		for (size_t i = 0; i < finalFomu.size(); i++)
 		{
@@ -191,6 +193,7 @@ public:
 
 	bool settingXml(string path)
 	{
+		//xml方式setting
 		string tpop;
 		ReadXml(path, fomuNum, maxopNum, range, tpop, fractionflag, precise);
 		for (size_t i = 0; i < ops.size(); i++)
@@ -199,12 +202,18 @@ public:
 		}
 		return true;
 	}
-	bool setting(int foN,int maxopN,int MaxR,vector<char> op,bool fraction,int preci)
+
+	bool setting(int foN, int maxopN, int MaxR, string op, bool fraction, int preci)
 	{
+		//非xml方式的setting
 		fomuNum = foN;
 		maxopNum = maxopN;
 		range = MaxR;
-		ops = op;
+		ops.clear();
+		for (size_t i = 0; i < op.size(); i++)
+		{
+			ops.push_back(op[i]);
+		}
 		fractionflag = fraction;
 		precise = preci;
 		return true;
