@@ -13,18 +13,18 @@ using namespace std;
 void ReadXml(string path, int& QuestionNum,
 	int & OperandNum, int & NumRange, string & OperatorKind,
 	bool & ProperFraction, int &Precise);
-//¶ÁÈ¡µ±Ç°Ä¿Â¼ÏÂpath¶ÔÓ¦µÄxmlÎÄ¼şĞÅÏ¢£¬¸ñÊ½°´ÕÕinfo.xml
-//×¢ÒâQuestionNum£¬OperandNum£¬NumRange±ØĞëÒªÇóÊÇÕıÕûÊı£¬¶øÇÒ¿ªÍ·²»ÄÜÊÇ0£¬Èç¹ûÊÇ010£¬»á±¨´í
-//OperatorKindÖĞÔËËã·ûºÅË³Ğò£º+-*/^()  
-//Ë³Ğò´í¾Í»á±¨´í
-//ProperFraction,Decimal,Power±ØĞëÊÇ0»òÕß1
-//ÎÄ¼şÖĞ²»ÄÜ´æÔÚÆäËûĞÅÏ¢£¬·ñÔò»á±¨´í 
+//è¯»å–å½“å‰ç›®å½•ä¸‹pathå¯¹åº”çš„xmlæ–‡ä»¶ä¿¡æ¯ï¼Œæ ¼å¼æŒ‰ç…§info.xml
+//æ³¨æ„QuestionNumï¼ŒOperandNumï¼ŒNumRangeå¿…é¡»è¦æ±‚æ˜¯æ­£æ•´æ•°ï¼Œè€Œä¸”å¼€å¤´ä¸èƒ½æ˜¯0ï¼Œå¦‚æœæ˜¯010ï¼Œä¼šæŠ¥é”™
+//OperatorKindä¸­è¿ç®—ç¬¦å·é¡ºåºï¼š+-*/^()  
+//é¡ºåºé”™å°±ä¼šæŠ¥é”™
+//ProperFraction,Decimal,Powerå¿…é¡»æ˜¯0æˆ–è€…1
+//æ–‡ä»¶ä¸­ä¸èƒ½å­˜åœ¨å…¶ä»–ä¿¡æ¯ï¼Œå¦åˆ™ä¼šæŠ¥é”™ 
 
 class fomularNode
 {
 public:
 	int value;
-	bool chFlag;//if true£¬value is ascii
+	bool chFlag;//if trueï¼Œvalue is ascii
 	fomularNode* lchild;
 	fomularNode* rchild;
 	fomularNode() :value(0), chFlag(false), lchild(NULL), rchild(NULL) {}
@@ -41,16 +41,16 @@ class fomularCore
 {
 private:
 	vector<fomularNode*> fomulars;
-	vector<char> ops = { '+','-','*','/','^','(',')' };//all ops ĞèÒª±£³Ö×îºóÁ½¸öÊÇÀ¨ºÅ£¡
-	vector<string> finalRes;//×îÖÕ½á¹û£¬ºÍGenerate·µ»ØÖµÒ»Ò»¶ÔÓ¦
-	int maxopNum = 5;//Ã¿¸ö±í´ïÊ½ÖĞÔËËã·û¸öÊı
-	int range = 100;//²Ù×÷ÊıÊıµÄÉÏÏŞ
-	int precise = 2;//Êä³ö¾«¶È£¨×î´óÎª6£©
-	int fomuNum;//±í´ïÊ½¸öÊı
-	int MaxRange = 100000;//ÔËËãÖĞ³öÏÖµÄ×î´óÊı
-	bool fractionflag = true;//ÊÇ·ñ½øĞĞ·ÖÊıÔËËã
-	double result[MAX_FOMU_NUM];//Ô­Ê¼×Ö·û´®ÔËËã½á¹û
-	bool okFlag[MAX_FOMU_NUM];//ÅĞ¶ÏÔ­Ê¼×Ö·û´®ÊÇ·ñ·ûºÏÒªÇó
+	vector<char> ops = { '+','-','*','/','^','(',')' };//all ops éœ€è¦ä¿æŒæœ€åä¸¤ä¸ªæ˜¯æ‹¬å·ï¼
+	vector<string> finalRes;//æœ€ç»ˆç»“æœï¼Œå’ŒGenerateè¿”å›å€¼ä¸€ä¸€å¯¹åº”
+	int maxopNum = 5;//æ¯ä¸ªè¡¨è¾¾å¼ä¸­è¿ç®—ç¬¦ä¸ªæ•°
+	int range = 100;//æ“ä½œæ•°æ•°çš„ä¸Šé™
+	int precise = 2;//è¾“å‡ºç²¾åº¦ï¼ˆæœ€å¤§ä¸º6ï¼‰
+	int fomuNum;//è¡¨è¾¾å¼ä¸ªæ•°
+	int MaxRange = 100000;//è¿ç®—ä¸­å‡ºç°çš„æœ€å¤§æ•°
+	bool fractionflag = true;//æ˜¯å¦è¿›è¡Œåˆ†æ•°è¿ç®—
+	double result[MAX_FOMU_NUM];//åŸå§‹å­—ç¬¦ä¸²è¿ç®—ç»“æœ
+	bool okFlag[MAX_FOMU_NUM];//åˆ¤æ–­åŸå§‹å­—ç¬¦ä¸²æ˜¯å¦ç¬¦åˆè¦æ±‚
 
 
 	bool deletefomu(fomularNode* ro)
@@ -88,7 +88,7 @@ private:
 	}
 	bool computeTree(fomularNode* ro, double &res);
 
-	//Ô­Ê¼±í´ïÊ½×ªºó×º²¢½¨Ê÷
+	//åŸå§‹è¡¨è¾¾å¼è½¬åç¼€å¹¶å»ºæ ‘
 	bool toPostTree(vector<string> & fomus);
 
 	bool isSameTree(fomularNode* ro1, fomularNode* ro2);
@@ -96,18 +96,18 @@ private:
 	bool isEqualTree(fomularNode* fo1, fomularNode* fo2);
 
 
-	//¸ù¾İ¸÷ÖÖ¹æÔòÅĞ¶Ï²¢´¦Àí¶ş²æÊ÷
-	//²ÉÓÃÏÈËæ»úÉú³ÉÁ½±¶»òÒÔÉÏµÄÔ­Ê¼±í´ïÊ½£¬ÔÙ´ÓÀïÃæÌôÑ¡·ûºÏÒªÇóµÄ,ÓÉokFlag¾ö¶¨
+	//æ ¹æ®å„ç§è§„åˆ™åˆ¤æ–­å¹¶å¤„ç†äºŒå‰æ ‘
+	//é‡‡ç”¨å…ˆéšæœºç”Ÿæˆä¸¤å€æˆ–ä»¥ä¸Šçš„åŸå§‹è¡¨è¾¾å¼ï¼Œå†ä»é‡Œé¢æŒ‘é€‰ç¬¦åˆè¦æ±‚çš„,ç”±okFlagå†³å®š
 	bool toJudgeTree();
 
-	vector<string> geneExp(int expNum);//Ëæ»úÉú³ÉÔ­Ê¼±í´ïÊ½
+	vector<string> geneExp(int expNum);//éšæœºç”ŸæˆåŸå§‹è¡¨è¾¾å¼
 
 	void treeTostr(fomularNode* ro, string &pre);
 
 	vector<string> fomusToStr(vector<fomularNode*> jFomus);
 
 public:
-	fomularCore(int Num = 10)//NumÊÇÒªÉú³ÉµÄ±í´ïÊ½¸öÊı
+	fomularCore(int Num = 10)//Numæ˜¯è¦ç”Ÿæˆçš„è¡¨è¾¾å¼ä¸ªæ•°
 	{
 		srand((unsigned int)(time(NULL)));
 
@@ -124,15 +124,30 @@ public:
 		}
 	}
 
+	bool Clear()
+	{
+		int Num = fomulars.size();
+		for (int i = 0; i < Num; i++)
+		{
+			fomularNode* temp = fomulars[i];
+			deletefomu(temp);
+		}
+		fomulars.clear();
+		finalRes.clear();
+		return true;
+	}
+
 	string Calc(string inputFomu)
 	{
+
+
 		int multi;
 		int tp;
 		string tpFomu;
 		long res;
 		multi = findMultiple(inputFomu);
 
-		if (fractionflag&&multi != 1 && !withDot(inputFomu))//ÓĞ¸¡µã'.'¾ÍÈÏÎª²»ÊÇ·ÖÊıÔËËã
+		if (fractionflag&&multi > 1&&multi<MaxRange && !withDot(inputFomu))//æœ‰æµ®ç‚¹'.'å°±è®¤ä¸ºä¸æ˜¯åˆ†æ•°è¿ç®—
 		{
 			tpFomu.append(to_string(multi));
 			tpFomu.append("*(");
@@ -141,14 +156,23 @@ public:
 			tp = gcd(res, multi);
 			tpFomu = to_string(int(res / tp));
 			if (multi / tp != 1)
-				tpFomu.append("/").append(to_string(multi / tp));
+			{
+				if (res > multi)
+				{
+					tpFomu.clear();
+					tpFomu.append(to_string(int(res / multi))).append("`").append(to_string(int(res / tp - int(res / multi)*(multi / tp)))).append("/").append(to_string(multi / tp));
+				}
+				else
+					tpFomu.append("/").append(to_string(multi / tp));
+			}
 			return tpFomu;
 		}
 		else
 		{
-			//ÕâÀïËÆºõÓĞ¸ÅÂÊ·ÃÎÊÔ½½ç
 			tpFomu = to_string(arthimetic(inputFomu));
 			for (int i = 0; i < 6 - precise; i++)
+				tpFomu.pop_back();
+			if (precise == 0)
 				tpFomu.pop_back();
 			return tpFomu;
 		}
@@ -159,27 +183,27 @@ public:
 
 		vector<string> rawFomu;
 		vector<fomularNode*> judgedFomu;
-		vector<string> finalFomu;
+		vector<string> finalFomu,tempFomu;
 
 
-		rawFomu = geneExp(3 * fomuNum);//3ÊÇ¿ÉÑ¡²ÎÊı£¬±£Ö¤ÄÜÑ¡³ö·ûºÏÒªÇó¸öÊıµÄ±í´ïÊ½
+		rawFomu = geneExp(3 * fomuNum);//3æ˜¯å¯é€‰å‚æ•°ï¼Œä¿è¯èƒ½é€‰å‡ºç¬¦åˆè¦æ±‚ä¸ªæ•°çš„è¡¨è¾¾å¼
 
-		toPostTree(rawFomu);//½¨Ê÷
-		toJudgeTree();//ÅĞ¶ÏÊÇ·ñ·ûºÏÒªÇó
+		toPostTree(rawFomu);//å»ºæ ‘
+		toJudgeTree();//åˆ¤æ–­æ˜¯å¦ç¬¦åˆè¦æ±‚
 
 		for (size_t i = 0; i < fomulars.size(); i++)
 		{
 			if (okFlag[i] == true)
-				judgedFomu.push_back(fomulars[i]);//Ñ¡³öºÏÊÊµÄÊ÷
+				judgedFomu.push_back(fomulars[i]);//é€‰å‡ºåˆé€‚çš„æ ‘
 		}
 
 
-		finalFomu = fomusToStr(judgedFomu);//Ê÷×ª±í´ïÊ½£¬È¥³ı¶àÓàÀ¨ºÅ
+		finalFomu = fomusToStr(judgedFomu);//æ ‘è½¬è¡¨è¾¾å¼ï¼Œå»é™¤å¤šä½™æ‹¬å·
 
 		for (size_t i = 0; i < finalFomu.size(); i++)
 		{
 			//cout << finalFomu[i] << '=';
-			//cout << Calc(finalFomu[i]) << endl;//²âÊÔÊä³ö
+			//cout << Calc(finalFomu[i]) << endl;//æµ‹è¯•è¾“å‡º
 			finalRes.push_back(Calc(finalFomu[i]));
 		}
 
@@ -193,7 +217,7 @@ public:
 
 	bool settingXml(string path)
 	{
-		//xml·½Ê½setting
+		//xmlæ–¹å¼setting
 		string tpop;
 		ReadXml(path, fomuNum, maxopNum, range, tpop, fractionflag, precise);
 		for (size_t i = 0; i < ops.size(); i++)
@@ -205,7 +229,7 @@ public:
 
 	bool setting(int foN, int maxopN, int MaxR, string op, bool fraction, int preci)
 	{
-		//·Çxml·½Ê½µÄsetting
+		//éxmlæ–¹å¼çš„setting
 		fomuNum = foN;
 		maxopNum = maxopN;
 		range = MaxR;
