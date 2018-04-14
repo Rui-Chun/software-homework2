@@ -44,6 +44,7 @@ private:
 	vector<char> ops = { '+','-','*','/','^','(',')' };//all ops 需要保持最后两个是括号！
 	vector<string> finalRes;//最终结果，和Generate返回值一一对应
 	int maxopNum = 5;//每个表达式中运算符个数
+	int minrange = 1;
 	int range = 100;//操作数数的上限
 	int precise = 2;//输出精度（最大为6）
 	int fomuNum;//表达式个数
@@ -145,6 +146,10 @@ public:
 		int tp;
 		string tpFomu;
 		long res;
+
+		if (fractionflag == false)
+			goto dir;
+
 		multi = findMultiple(inputFomu);
 
 		if (fractionflag&&multi > 1&&multi<MaxRange && !withDot(inputFomu))//有浮点'.'就认为不是分数运算
@@ -160,7 +165,7 @@ public:
 				if (res > multi)
 				{
 					tpFomu.clear();
-					tpFomu.append(to_string(int(res / multi))).append("`").append(to_string(int(res / tp - int(res / multi)*(multi / tp)))).append("/").append(to_string(multi / tp));
+					tpFomu.append(to_string(int(res / multi))).append("'").append(to_string(int(res / tp - int(res / multi)*(multi / tp)))).append("/").append(to_string(multi / tp));
 				}
 				else
 					tpFomu.append("/").append(to_string(multi / tp));
@@ -169,6 +174,7 @@ public:
 		}
 		else
 		{
+			dir:
 			tpFomu = to_string(arthimetic(inputFomu));
 			for (int i = 0; i < 6 - precise; i++)
 				tpFomu.pop_back();
@@ -200,11 +206,45 @@ public:
 
 		finalFomu = fomusToStr(judgedFomu);//树转表达式，去除多余括号
 
+
+
 		for (size_t i = 0; i < finalFomu.size(); i++)
 		{
 			//cout << finalFomu[i] << '=';
 			//cout << Calc(finalFomu[i]) << endl;//测试输出
 			finalRes.push_back(Calc(finalFomu[i]));
+		}
+
+		//加空格
+		string temp;
+		for (size_t i = 0; i < finalFomu.size(); i++)
+		{
+			temp = finalFomu[i];
+			for (size_t k = 0; k < temp.size(); k++)
+			{
+				if (temp[k] == '/'&&fractionflag == true)
+				{
+					/*int begin, end;
+					for (begin = k - 1; isNum(temp[begin]); begin--)
+					{
+						if(isOperate(temp[begin - 1]))
+
+					}
+					for (end = k + 1; isNum(temp[end]); end++);
+					string numA, numB;
+					numA = temp.substr(begin, k);
+					numB=temp*/
+					continue;
+				}
+				else if (isOperate(temp[k]) && temp[k] != '('&&temp[k] != ')')
+				{
+					temp.insert(k, 1, ' ');
+					temp.insert(k + 2, 1, ' ');
+					k += 3;
+				}
+			}
+
+			finalFomu[i] = temp;
 		}
 
 		return finalFomu;
@@ -227,11 +267,12 @@ public:
 		return true;
 	}
 
-	bool setting(int foN, int maxopN, int MaxR, string op, bool fraction, int preci)
+	bool setting(int foN, int maxopN,int MinR, int MaxR, string op, bool fraction, int preci)
 	{
 		//非xml方式的setting
 		fomuNum = foN;
 		maxopNum = maxopN;
+		minrange = MinR;
 		range = MaxR;
 		ops.clear();
 		for (size_t i = 0; i < op.size(); i++)

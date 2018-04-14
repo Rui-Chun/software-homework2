@@ -16,9 +16,9 @@ int main()
 	fomularCore test(100);//这里需要初始化式子个数
 	vector<string> out, Res;
 	string temp;
-	string ops = "+-*/()";//最后两个要为括号
+	string ops = "+-*/^()";//最后两个要为括号
 
-	test.setting(1000, 10, 10, ops, true, 3);//参数分别为 式子个数，运算符个数，
+	test.setting(4000, 10, 5,10, ops, true, 4);//参数分别为 式子个数，运算符个数，
 											 //操作数最大范围，运算符，是否支持分数，小数精度（最多6
 											 //test.settingXml("info.xml"); 也可以使用xml文件
 

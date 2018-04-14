@@ -234,6 +234,7 @@ vector<string> fomularCore::geneExp(int expNum)
 	int loc1, loc2;//括号位置
 	int opnum, bracketNum;
 	bool isPower = false;
+	int poflag = 0;
 
 	for (int i = 0; i < expNum; i++)
 	{
@@ -243,7 +244,7 @@ vector<string> fomularCore::geneExp(int expNum)
 		{
 			if (isPower == false)
 			{
-				num = random(1, range);//暂时不管0.。
+				num = random(minrange, range);//暂时不管0.。
 				numstr = to_string(num);
 			}
 			else
@@ -252,15 +253,20 @@ vector<string> fomularCore::geneExp(int expNum)
 				numstr = to_string(num);
 				isPower = false;
 			}
-			opch = ops[random(0, ops.size() - 3)];//选择运算符
+			opch = ops[random(0, ops.size() - 3- poflag)];//选择运算符
 			if (char(opch) == '^')
+			{
 				isPower = true;
+				poflag = 1;
+			}
+
 			temp.append(numstr);
 			temp.push_back(opch);
 		}
-		num = random(1, range);//暂时不管0.。
+		num = random(minrange, range);//暂时不管0.。
 		numstr = to_string(num);
 		temp.append(numstr);
+
 
 		bracketNum = random(1, opnum);//选定括号对数
 
@@ -282,11 +288,10 @@ vector<string> fomularCore::geneExp(int expNum)
 			temp.insert(loc2, 1, ')');
 		}
 
-
-
+	
 		res.push_back(temp);
 		temp.clear();
-
+		poflag = 0;
 	}
 
 	
